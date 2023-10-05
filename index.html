@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PoC Category predictor</title>
+</head>
+<body>
+    <h1>PoC Category predictor</h1>
+    <form id="apiForm">
+        <label for="inputValue">Kategorie:</label>
+        <input type="text" id="inputValue" name="inputValue" required>
+        <button type="button" onclick="sendApiRequest()">Odeslat</button>
+    </form>
+    <h2>Odpověď:</h2>
+    <pre id="response"></pre>
+
+    <script>
+        function sendApiRequest() {
+            const inputValue = document.getElementById("inputValue").value;
+            const requestBody = JSON.stringify({
+                "third_party_category": inputValue
+            });
+
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Content-Length": requestBody.length.toString()
+                },
+                body: requestBody
+            };
+
+            fetch("http://167.71.63.108:5008/predict", requestOptions)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("response").textContent = data;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</body>
+</html>
